@@ -1,37 +1,51 @@
-import React, { useState } from "react";
-import "./TodoItem.css";
-import Checkbox from "../checkbox/CheckBox";
+// import React, { useState } from 'react';
+import './TodoItem.css';
+import Checkbox from '../checkbox/CheckBox';
 
-const TodoItem = (props) => {
-  const handleCheckboxChange = (value) => {
-    console.log(value);
+const TodoItem = ({ todos, onToggleComplete, onEdit, onDelete }) => {
+  const handleCheckboxChange = (id) => {
+    if (onToggleComplete) {
+      onToggleComplete(id);
+    }
+  };
+  const handleEdit = (id) => {
+    if (onEdit) onEdit(id);
+  };
+  const handleDelete = (id) => {
+    if (onDelete) onDelete(id);
   };
 
-  return (
-    <div className={`todo-item ${props.completed && "todo-completed"}`}>
-      <div className="todo-item-header">
-        <div className="title-area">
-          <Checkbox
-            checked={!!props.completed}
-            onChange={handleCheckboxChange}
-          />
+  return todos.map((todo) => {
+    return (
+      <div
+        className={`todo-item ${todo.completed && 'todo-completed'}`}
+        key={todo.id}
+      >
+        <div className='todo-item-header'>
+          <div className='title-area'>
+            <Checkbox
+              checked={!!todo.completed}
+              onChange={() => handleCheckboxChange(todo.id)}
+            />
 
-          <h4>Assignment 1</h4>
+            <h4>{todo.title}</h4>
+          </div>
+          <div>
+            <button className='sterge' onClick={() => handleEdit(todo.id)}>
+              <i className='fa fa-pencil' aria-hidden='true'></i>
+            </button>
+            <button className='sterge' onClick={() => handleDelete(todo.id)}>
+              <i className='fa fa-trash' aria-hidden='true'></i>
+            </button>
+          </div>
         </div>
-        <div>
-          <i className="fa fa-pencil" aria-hidden="true"></i>
-          <i className="fa fa-trash" aria-hidden="true"></i>
-        </div>
+
+        <div className='separator'></div>
+
+        <p>{todo.description}</p>
       </div>
-
-      <div className="separator"></div>
-
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. At id illo
-        repellendus non maiores in pariatur aliquam iure fugit amet!
-      </p>
-    </div>
-  );
+    );
+  });
 };
 
 export default TodoItem;
